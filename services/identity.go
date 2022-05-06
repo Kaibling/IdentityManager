@@ -93,3 +93,22 @@ func (s *IdentityService) Renew(domain string) error {
 	}
 	return errors.New("not found")
 }
+
+func (s *IdentityService) Change(domain, property, data string) error {
+	if val, ok := s.identities[domain]; ok {
+		pm, err := val.ToMap()
+		if err != nil {
+			return err
+		}
+		pm[property] = data
+		newPerson := models.PersonFull{}
+		newPerson.FromMap(pm)
+		err = repositories.ReplaceLine([]string{domain, newPerson.ToString()}, config.Configuration.DBFilePath)
+		if err != nil {
+			return err
+		}
+		s.identities[domain] = newPerson
+		return nil
+	}
+	return errors.New("not found")
+}

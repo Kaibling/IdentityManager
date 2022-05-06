@@ -25,6 +25,28 @@ func (p *PersonFull) ToString() string {
 	return string(byt)
 }
 
+func (p *PersonFull) ToMap() (map[string]interface{}, error) {
+	byt, _ := json.Marshal(p)
+	var m map[string]interface{}
+	err := json.Unmarshal(byt, &m)
+	if err != nil {
+		return map[string]interface{}{}, err
+	}
+	return m, nil
+}
+
+func (p *PersonFull) FromMap(m map[string]interface{}) error {
+	byt, err := json.Marshal(m)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(byt, p)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (p *PersonFull) ToReduced() PersonReduced {
 	return PersonReduced{
 		FirstName: p.FirstName,

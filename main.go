@@ -72,6 +72,25 @@ func renew(args []string) error {
 	return nil
 }
 
+func change(args []string) error {
+	if len(args) < 2 {
+		help()
+		return errors.New("not enough arguments")
+	}
+	domain := args[0]
+	property := args[1]
+	data := args[2]
+	err := services.IdentityServiceI.Change(domain, property, data)
+	if err != nil {
+		return err
+	}
+	err = services.IdentityServiceI.ShowIdentity(domain, cmd.Flags["a"])
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func help() {
 	fmt.Println("help") // TODO
 }
@@ -92,6 +111,7 @@ func main() {
 	c.AddCommand("new", new)
 	c.AddCommand("del", del)
 	c.AddCommand("renew", renew)
+	c.AddCommand("change", change)
 
 	err := c.Exec(args)
 	if err != nil {
