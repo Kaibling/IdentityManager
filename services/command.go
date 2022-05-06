@@ -25,7 +25,7 @@ func List(args []string) error {
 
 func New(args []string) error {
 	if len(args) < 1 {
-		Help()
+		fmt.Println("new <domain>")
 		return errors.New("not enough arguments")
 	}
 	newDomain := args[0]
@@ -43,7 +43,7 @@ func New(args []string) error {
 
 func Del(args []string) error {
 	if len(args) < 1 {
-		Help()
+		fmt.Println("del <domain>")
 		return errors.New("not enough arguments")
 	}
 	err := IdentityServiceI.Delete(args[0])
@@ -55,7 +55,7 @@ func Del(args []string) error {
 
 func Renew(args []string) error {
 	if len(args) < 1 {
-		Help()
+		fmt.Println("renew <domain>")
 		return errors.New("not enough arguments")
 	}
 	err := IdentityServiceI.Renew(args[0])
@@ -71,7 +71,7 @@ func Renew(args []string) error {
 
 func Change(args []string) error {
 	if len(args) < 2 {
-		Help()
+		fmt.Println("change <domain> <property> <value>")
 		return errors.New("not enough arguments")
 	}
 	domain := args[0]
@@ -89,5 +89,11 @@ func Change(args []string) error {
 }
 
 func Help() {
-	fmt.Println("help") // TODO
+	fmt.Printf("generate and store identities\ncommands:\n")
+	fmt.Printf("list : lists all domains and corresponding email\n")
+	fmt.Printf("list <domain> : shows details to an identity\n")
+	fmt.Printf("del : removes identity and domain\n")
+	fmt.Printf("change : change properties of identity\n")
+	fmt.Printf("new : create random identity\n")
+	fmt.Printf("renew : recrate password of identity\n")
 }
