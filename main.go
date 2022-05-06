@@ -62,6 +62,7 @@ func help() {
 
 func main() {
 	config.InitConfig()
+	services.InitIdentityService()
 	args := os.Args[1:]
 	args = cmd.ParseFlags(args)
 	if len(args) == 0 {

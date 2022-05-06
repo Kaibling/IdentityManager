@@ -3,8 +3,7 @@ package config
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
-	"iotuil"
+	"io/ioutil"
 	"os"
 )
 
@@ -25,25 +24,21 @@ func InitConfig() {
 	return
 }
 
-func defaultConfig() *Config {
-	return &Config{Email: "change@me.now", DBFilePath: "im.csv"}
+func defaultConfig() Config {
+	return Config{Email: "@change.me", DBFilePath: ".im.csv"}
 }
 
 func readConfigFile() (*Config, error) {
-	var f *os.File
 	if _, err := os.Stat(configFilePath); errors.Is(err, os.ErrNotExist) {
-		f, err = os.Create(configFilePath)
-		if err != nil {
-			return nil, err
-		}
-		f.Close()
-
+		c := defaultConfig()
+		b, _ := json.Marshal(&c)
+		ioutil.WriteFile(configFilePath, b, 0644)
+		return &c, nil
 	}
-	body, err := iotuil.ReadFile(configFilePath)
+	body, err := ioutil.ReadFile(configFilePath)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(string(body))
 	var c Config
 	err = json.Unmarshal(body, &c)
 	if err != nil {

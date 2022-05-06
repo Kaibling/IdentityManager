@@ -11,16 +11,16 @@ import (
 	"github.com/Kaibling/IdentityManager/repositories"
 )
 
-var IdentityServiceI = NewIdentityService()
+var IdentityServiceI *IdentityService = nil
 
 type IdentityService struct {
 	identities map[string]models.PersonFull
 }
 
-func NewIdentityService() *IdentityService {
+func InitIdentityService() {
 	is := &IdentityService{identities: map[string]models.PersonFull{}}
 	is.ReadFromFile(config.Configuration.DBFilePath)
-	return is
+	IdentityServiceI = is
 }
 
 func (s *IdentityService) ReadFromFile(filePath string) error {
