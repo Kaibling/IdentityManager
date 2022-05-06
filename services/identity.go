@@ -5,11 +5,10 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/Kaibling/IdentityManager/config"
 	g "github.com/Kaibling/IdentityManager/generator"
 	"github.com/Kaibling/IdentityManager/repositories"
 )
-
-var defaultFilePath = "fp.csv"
 
 var IdentityServiceI = NewIdentityService()
 
@@ -19,7 +18,7 @@ type IdentityService struct {
 
 func NewIdentityService() *IdentityService {
 	is := &IdentityService{identities: map[string]g.Person{}}
-	is.ReadFromFile(defaultFilePath)
+	is.ReadFromFile(config.Configuration.DBFilePath)
 	return is
 }
 
@@ -52,7 +51,7 @@ func (s *IdentityService) NewIdentity(domain string) error {
 	}
 	newIdentity := g.NewRandomPerson()
 	line := []string{domain, newIdentity.ToString()}
-	err := repositories.WriteData(defaultFilePath, line)
+	err := repositories.WriteData(config.Configuration.DBFilePath, line)
 	if err != nil {
 		return fmt.Errorf("write Error: %s", err.Error())
 	}
@@ -71,7 +70,7 @@ func (s *IdentityService) ShowIdentity(domain string) error {
 
 func (s *IdentityService) Delete(domain string) error {
 	if _, ok := s.identities[domain]; ok {
-		return repositories.RemoveLine(domain, defaultFilePath)
+		return repositories.RemoveLine(domain, config.Configuration.DBFilePath)
 	}
 	return errors.New("not found")
 

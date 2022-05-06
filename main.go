@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/Kaibling/IdentityManager/cmd"
+	"github.com/Kaibling/IdentityManager/config"
 	"github.com/Kaibling/IdentityManager/services"
 )
 
@@ -60,7 +61,7 @@ func help() {
 }
 
 func main() {
-
+	config.InitConfig()
 	args := os.Args[1:]
 	args = cmd.ParseFlags(args)
 	fmt.Println(args)

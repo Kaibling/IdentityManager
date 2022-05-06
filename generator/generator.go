@@ -7,18 +7,18 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Kaibling/IdentityManager/config"
 	"github.com/jaswdr/faker"
 )
 
 var faaker = faker.New()
-var serviceUsername = "@mkp667mklwhzwq.anonaddy.com"
 
 type Person struct {
 	FirstName         string
 	LastName          string
 	Email             string
 	Username          string
-	Password          string //todo
+	Password          string
 	BirthDate         string
 	Gender            string
 	Street            string
@@ -59,7 +59,7 @@ func NewRandomPerson() *Person {
 	return &Person{
 		FirstName:         firstName,
 		LastName:          lastName,
-		Email:             strings.ToLower(fmt.Sprintf("%s.%s%s", firstName, lastName, serviceUsername)),
+		Email:             strings.ToLower(fmt.Sprintf("%s.%s%s", firstName, lastName, config.Configuration.Email)),
 		Username:          generateUserName(firstName, lastName, birthDate),
 		BirthDate:         birthDate,
 		Street:            street,
