@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Kaibling/IdentityManager/config"
-	g "github.com/Kaibling/IdentityManager/generator"
+	"github.com/Kaibling/IdentityManager/lib/config"
+	g "github.com/Kaibling/IdentityManager/lib/generator"
 	"github.com/Kaibling/IdentityManager/models"
 	"github.com/Kaibling/IdentityManager/repositories"
 )

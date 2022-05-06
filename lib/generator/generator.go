@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Kaibling/IdentityManager/config"
+	"github.com/Kaibling/IdentityManager/lib/config"
 	"github.com/Kaibling/IdentityManager/models"
 	"github.com/jaswdr/faker"
 )

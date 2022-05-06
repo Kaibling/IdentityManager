@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Kaibling/IdentityManager/cmd"
-	"github.com/Kaibling/IdentityManager/config"
+	"github.com/Kaibling/IdentityManager/lib/cmd"
+	"github.com/Kaibling/IdentityManager/lib/config"
 	"github.com/Kaibling/IdentityManager/services"
 )
 
@@ -117,7 +117,4 @@ func main() {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	// lock  encrypt data
-	// unlock decrypts data
-	// renew <domain> -> renews password
 }
