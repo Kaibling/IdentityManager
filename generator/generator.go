@@ -1,42 +1,19 @@
 package generator
 
 import (
-	"encoding/json"
 	"fmt"
 	"math/rand"
 	"strings"
 	"time"
 
+	"github.com/Kaibling/IdentityManager/models"
 	"github.com/jaswdr/faker"
 )
 
 var faaker = faker.New()
 var serviceUsername = "@mkp667mklwhzwq.anonaddy.com"
 
-type Person struct {
-	FirstName         string
-	LastName          string
-	Email             string
-	Username          string
-	Password          string //todo
-	BirthDate         string
-	Gender            string
-	Street            string
-	Country           string
-	PhoneNumber       string
-	CreditCard        string
-	HomePage          string
-	Company           string
-	Job               string
-	SecurityQuestions []string
-}
-
-func (p *Person) ToString() string {
-	byt, _ := json.Marshal(p)
-	return string(byt)
-}
-
-func NewRandomPerson() *Person {
+func NewRandomPerson() *models.PersonFull {
 
 	gender := faaker.Person().Gender()
 	var firstName string
@@ -56,7 +33,7 @@ func NewRandomPerson() *Person {
 	job := faaker.Company().JobTitle()
 	phoneNumber := faaker.Phone().Number()
 	creditCard := faaker.Payment().CreditCardNumber()
-	return &Person{
+	return &models.PersonFull{
 		FirstName:         firstName,
 		LastName:          lastName,
 		Email:             strings.ToLower(fmt.Sprintf("%s.%s%s", firstName, lastName, serviceUsername)),

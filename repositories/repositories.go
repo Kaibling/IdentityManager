@@ -35,7 +35,7 @@ func WriteData(filePath string, line []string) error {
 	ensureFile(filePath)
 	var f *os.File
 
-	f, err := os.OpenFile(filePath, os.O_APPEND, 0644)
+	f, err := os.OpenFile(filePath, os.O_APPEND|os.O_WRONLY, 0655)
 	if err != nil {
 		return err
 	}
@@ -44,7 +44,6 @@ func WriteData(filePath string, line []string) error {
 
 	w := csv.NewWriter(f)
 	defer w.Flush()
-
 	if err := w.Write(line); err != nil {
 		return err
 	}
@@ -54,7 +53,7 @@ func WriteData(filePath string, line []string) error {
 
 func RemoveLine(domain, filePath string) error {
 	ensureFile(filePath)
-	f, err := os.OpenFile(filePath, os.O_RDONLY, 0644)
+	f, err := os.OpenFile(filePath, os.O_RDONLY, 0655)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
