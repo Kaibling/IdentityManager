@@ -7,17 +7,18 @@ import (
 
 	"github.com/Kaibling/IdentityManager/config"
 	g "github.com/Kaibling/IdentityManager/generator"
+	"github.com/Kaibling/IdentityManager/models"
 	"github.com/Kaibling/IdentityManager/repositories"
 )
 
 var IdentityServiceI = NewIdentityService()
 
 type IdentityService struct {
-	identities map[string]g.Person
+	identities map[string]models.PersonFull
 }
 
 func NewIdentityService() *IdentityService {
-	is := &IdentityService{identities: map[string]g.Person{}}
+	is := &IdentityService{identities: map[string]models.PersonFull{}}
 	is.ReadFromFile(config.Configuration.DBFilePath)
 	return is
 }
@@ -28,7 +29,7 @@ func (s *IdentityService) ReadFromFile(filePath string) error {
 		return err
 	}
 	for i := range data {
-		var person g.Person
+		var person models.PersonFull
 		err = json.Unmarshal([]byte(data[i][1]), &person)
 		if err != nil {
 			return err
@@ -59,10 +60,17 @@ func (s *IdentityService) NewIdentity(domain string) error {
 	return nil
 }
 
-func (s *IdentityService) ShowIdentity(domain string) error {
+func (s *IdentityService) ShowIdentity(domain string, verbose bool) error {
 	if p, ok := s.identities[domain]; ok {
-		b, _ := json.MarshalIndent(p, "", " ")
-		fmt.Println(string(b))
+		if verbose {
+			b, _ := json.MarshalIndent(p, "", " ")
+			fmt.Println(string(b))
+		} else {
+			b, _ := json.MarshalIndent(p.ToReduced(), "", " ")
+			fmt.Println(string(b))
+
+		}
+
 		return nil
 	}
 	return errors.New("no entry found")

@@ -13,7 +13,7 @@ import (
 func list(args []string) error {
 	if len(args) > 0 {
 		//show single entry
-		err := services.IdentityServiceI.ShowIdentity(args[0])
+		err := services.IdentityServiceI.ShowIdentity(args[0], cmd.Flags["a"]) // TODO enum
 		if err != nil {
 			return err
 		}
@@ -36,7 +36,7 @@ func new(args []string) error {
 	if err != nil {
 		return err
 	}
-	err = services.IdentityServiceI.ShowIdentity(newDomain)
+	err = services.IdentityServiceI.ShowIdentity(newDomain, cmd.Flags["a"])
 	if err != nil {
 		return err
 	}
@@ -64,10 +64,10 @@ func main() {
 	config.InitConfig()
 	args := os.Args[1:]
 	args = cmd.ParseFlags(args)
-	fmt.Println(args)
 	if len(args) == 0 {
 		// show help
 		help()
+		return
 	}
 
 	c := cmd.NewCommands()
