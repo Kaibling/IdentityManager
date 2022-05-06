@@ -56,8 +56,24 @@ func del(args []string) error {
 	return nil
 }
 
+func renew(args []string) error {
+	if len(args) < 1 {
+		help()
+		return errors.New("not enough arguments")
+	}
+	err := services.IdentityServiceI.Renew(args[0])
+	if err != nil {
+		return err
+	}
+	err = services.IdentityServiceI.ShowIdentity(args[0], cmd.Flags["a"])
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func help() {
-	fmt.Println("help")
+	fmt.Println("help") // TODO
 }
 
 func main() {
@@ -75,6 +91,7 @@ func main() {
 	c.AddCommand("list", list)
 	c.AddCommand("new", new)
 	c.AddCommand("del", del)
+	c.AddCommand("renew", renew)
 
 	err := c.Exec(args)
 	if err != nil {

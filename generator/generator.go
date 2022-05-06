@@ -41,7 +41,7 @@ func NewRandomPerson() *models.PersonFull {
 		BirthDate:         birthDate,
 		Street:            street,
 		Country:           country,
-		Password:          randomPassword(),
+		Password:          RandomPassword(),
 		HomePage:          homePage,
 		Gender:            gender,
 		Company:           company,
@@ -97,7 +97,7 @@ func randomDate() string {
 	return t.Format("02-Jan-2006")
 }
 
-func randomPassword() string {
+func RandomPassword() string {
 	rand.Seed(time.Now().UnixNano())
 	digits := "0123456789"
 	specials := "~=+%^*/()[]{}/!@#$?|"

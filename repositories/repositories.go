@@ -87,3 +87,37 @@ func RemoveLine(domain, filePath string) error {
 	return nil
 
 }
+
+func ReplaceLine(rline []string, filePath string) error {
+	ensureFile(filePath)
+	f, err := os.OpenFile(filePath, os.O_RDONLY, 0655)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	defer f.Close()
+
+	r := csv.NewReader(f)
+	data, err := r.ReadAll()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	for i := range data {
+		if data[i][0] == rline[0] {
+			data[i][1] = rline[1]
+		}
+	}
+	f.Close()
+	f, err = os.Create(filePath)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	defer f.Close()
+	w := csv.NewWriter(f)
+	err = w.WriteAll(data)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}

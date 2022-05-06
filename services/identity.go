@@ -68,9 +68,7 @@ func (s *IdentityService) ShowIdentity(domain string, verbose bool) error {
 		} else {
 			b, _ := json.MarshalIndent(p.ToReduced(), "", " ")
 			fmt.Println(string(b))
-
 		}
-
 		return nil
 	}
 	return errors.New("no entry found")
@@ -81,5 +79,17 @@ func (s *IdentityService) Delete(domain string) error {
 		return repositories.RemoveLine(domain, config.Configuration.DBFilePath)
 	}
 	return errors.New("not found")
+}
 
+func (s *IdentityService) Renew(domain string) error {
+	if val, ok := s.identities[domain]; ok {
+		val.Password = g.RandomPassword()
+		err := repositories.ReplaceLine([]string{domain, val.ToString()}, config.Configuration.DBFilePath)
+		if err != nil {
+			return err
+		}
+		s.identities[domain] = val
+		return nil
+	}
+	return errors.New("not found")
 }
