@@ -2,21 +2,22 @@ package generator
 
 import "testing"
 
-func Test_randomPassword(t *testing.T) {
-	tests := []struct {
-		name string
-		want string
-	}{
-		{
-			name: "Test 1: things",
-			want: "dffd",
-		},
+func TestRandomPassword(t *testing.T) {
+	passwordlength = 12
+	got := RandomPassword()
+	if len(got) != 12 {
+		t.Error()
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := RandomPassword(); got != tt.want {
-				t.Errorf("randomPassword() = %v, want %v", got, tt.want)
-			}
-		})
+
+}
+
+// func TestrandomDate(t *testing.T) {
+// 	date := randomDate()
+// 	reqexformat // todo
+// }
+func TestGenerateUserName(t *testing.T) {
+	username := generateUserName("test", "last", "efwefwe92")
+	if username == "" {
+		t.Error()
 	}
 }

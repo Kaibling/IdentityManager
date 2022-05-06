@@ -12,6 +12,7 @@ import (
 )
 
 var faaker = faker.New()
+var passwordlength = 40
 
 func NewRandomPerson() *models.PersonFull {
 
@@ -104,7 +105,7 @@ func RandomPassword() string {
 	all := "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
 		"abcdefghijklmnopqrstuvwxyz" +
 		digits + specials
-	length := 40
+	length := passwordlength
 	buf := make([]byte, length)
 	buf[0] = digits[rand.Intn(len(digits))]
 	buf[1] = specials[rand.Intn(len(specials))]
