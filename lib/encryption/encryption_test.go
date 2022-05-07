@@ -5,6 +5,15 @@ import (
 	"testing"
 )
 
+// b := encryption.Encrypt([]byte("key"), []byte("super gehein"))
+// s := encryption.EncodeB64(b)
+// fmt.Println(s)
+// b, err := encryption.DecodeB64(s)
+// if err != nil {
+// 	fmt.Println(err.Error())
+// }
+// p := encryption.Decrypt([]byte("key"), b)
+// fmt.Println(string(p))
 // func TestEncrypt(t *testing.T) {
 // 	generateSalt = func() []byte {
 // 		return []byte{163, 164, 178, 70, 146, 133, 15, 232, 52, 165, 190, 193, 139, 93, 77, 255}

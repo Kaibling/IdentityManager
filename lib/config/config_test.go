@@ -13,7 +13,7 @@ func Test_readConfigFile(t *testing.T) {
 	}{
 		{
 			name:    "Test 1: things",
-			want:    &Config{Email: "change@me.now", DBFilePath: "im.csv"},
+			want:    &Config{Email: "@change.me", DBFilePath: ".im.csv"},
 			wantErr: false,
 		},
 	}
