@@ -2,7 +2,7 @@ package models
 
 import "encoding/json"
 
-type PersonFull struct {
+type Person struct {
 	FirstName         string
 	LastName          string
 	Domain            string
@@ -21,12 +21,12 @@ type PersonFull struct {
 	SecurityQuestions []string
 }
 
-func (p *PersonFull) ToString() string {
+func (p *Person) ToString() string {
 	byt, _ := json.Marshal(p)
 	return string(byt)
 }
 
-func (p *PersonFull) ToMap() (map[string]interface{}, error) {
+func (p *Person) ToMap() (map[string]interface{}, error) {
 	byt, _ := json.Marshal(p)
 	var m map[string]interface{}
 	err := json.Unmarshal(byt, &m)
@@ -36,7 +36,7 @@ func (p *PersonFull) ToMap() (map[string]interface{}, error) {
 	return m, nil
 }
 
-func (p *PersonFull) FromMap(m map[string]interface{}) error {
+func (p *Person) FromMap(m map[string]interface{}) error {
 	byt, err := json.Marshal(m)
 	if err != nil {
 		return err
@@ -48,7 +48,7 @@ func (p *PersonFull) FromMap(m map[string]interface{}) error {
 	return nil
 }
 
-func (p *PersonFull) ToReduced() PersonReduced {
+func (p *Person) ToReduced() PersonReduced {
 	return PersonReduced{
 		FirstName: p.FirstName,
 		LastName:  p.LastName,

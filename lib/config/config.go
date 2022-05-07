@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 )
@@ -10,22 +11,35 @@ import (
 var Configuration *Config = nil
 var configFilePath = ".im.json"
 
+var dialects = map[string]int{"CSV": 1, "SQLITE": 1}
+
 type Config struct {
 	Email      string
 	DBFilePath string
+	Dialect    string
 }
 
-func InitConfig() {
+func InitConfig() error {
 	configData, err := readConfigFile()
 	if err != nil {
-		panic(err)
+		return err
+	}
+	err = validate(configData)
+	if err != nil {
+		return err
 	}
 	Configuration = configData
-	return
+	return nil
+}
+func validate(conf *Config) error {
+	if _, ok := dialects[conf.Dialect]; !ok {
+		return fmt.Errorf("unknown dialect '%s'", conf.Dialect)
+	}
+	return nil
 }
 
 func defaultConfig() Config {
-	return Config{Email: "@change.me", DBFilePath: ".im.csv"}
+	return Config{Email: "@change.me", DBFilePath: ".im.db", Dialect: "SQLITE"}
 }
 
 func readConfigFile() (*Config, error) {

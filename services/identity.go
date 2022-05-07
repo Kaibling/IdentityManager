@@ -9,22 +9,22 @@ import (
 	"github.com/Kaibling/IdentityManager/models"
 )
 
-type identityRepo interface {
-	ReadAll() ([]models.PersonFull, error)
-	Create(p models.PersonFull) error
+type IdentityRepo interface {
+	ReadAll() ([]models.Person, error)
+	Create(p models.Person) error
 	Delete(domain string) error
-	Update(p models.PersonFull) error
+	Update(p models.Person) error
 }
 
 var IdentityServiceI *IdentityService = nil
 
 type IdentityService struct {
-	identities map[string]models.PersonFull
-	repo       identityRepo
+	identities map[string]models.Person
+	repo       IdentityRepo
 }
 
-func InitIdentityService(repo identityRepo) error {
-	is := &IdentityService{identities: map[string]models.PersonFull{}, repo: repo}
+func InitIdentityService(repo IdentityRepo) error {
+	is := &IdentityService{identities: map[string]models.Person{}, repo: repo}
 	p, err := is.repo.ReadAll()
 	if err != nil {
 		return err
@@ -99,7 +99,7 @@ func (s *IdentityService) Change(domain, property, data string) error {
 			return err
 		}
 		pm[property] = data
-		newPerson := models.PersonFull{}
+		newPerson := models.Person{}
 		newPerson.FromMap(pm)
 		err = s.repo.Update(newPerson)
 		if err != nil {

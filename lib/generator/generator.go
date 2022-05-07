@@ -14,7 +14,7 @@ import (
 var faaker = faker.New()
 var passwordlength = 40
 
-func NewRandomPerson() *models.PersonFull {
+func NewRandomPerson() *models.Person {
 
 	gender := faaker.Person().Gender()
 	var firstName string
@@ -34,7 +34,7 @@ func NewRandomPerson() *models.PersonFull {
 	job := faaker.Company().JobTitle()
 	phoneNumber := faaker.Phone().Number()
 	creditCard := faaker.Payment().CreditCardNumber()
-	return &models.PersonFull{
+	return &models.Person{
 		FirstName:         firstName,
 		LastName:          lastName,
 		Email:             strings.ToLower(fmt.Sprintf("%s.%s%s", firstName, lastName, config.Configuration.Email)),

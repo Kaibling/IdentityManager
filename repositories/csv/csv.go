@@ -18,7 +18,7 @@ func NewCSVRepo(filePath string) *CSVRepo {
 	return &CSVRepo{filePath: filePath}
 }
 
-func (c *CSVRepo) ReadAll() ([]models.PersonFull, error) {
+func (c *CSVRepo) ReadAll() ([]models.Person, error) {
 	ensureFile(c.filePath)
 	f, err := os.Open(c.filePath)
 	if err != nil {
@@ -30,9 +30,9 @@ func (c *CSVRepo) ReadAll() ([]models.PersonFull, error) {
 	if err != nil {
 		return nil, err
 	}
-	persons := []models.PersonFull{}
+	persons := []models.Person{}
 	for i := range records {
-		var person models.PersonFull
+		var person models.Person
 		err = json.Unmarshal([]byte(records[i][1]), &person)
 		if err != nil {
 			return nil, err
@@ -43,7 +43,7 @@ func (c *CSVRepo) ReadAll() ([]models.PersonFull, error) {
 	return persons, nil
 }
 
-func (c *CSVRepo) Create(p models.PersonFull) error {
+func (c *CSVRepo) Create(p models.Person) error {
 	line := []string{p.Domain, p.ToString()}
 
 	ensureFile(c.filePath)
@@ -100,7 +100,7 @@ func (c *CSVRepo) Delete(domain string) error {
 
 }
 
-func (c *CSVRepo) Update(p models.PersonFull) error {
+func (c *CSVRepo) Update(p models.Person) error {
 	ensureFile(c.filePath)
 	f, err := os.OpenFile(c.filePath, os.O_RDONLY, 0655)
 	if err != nil {
