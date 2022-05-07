@@ -6,12 +6,14 @@ import (
 
 	"github.com/Kaibling/IdentityManager/lib/cmd"
 	"github.com/Kaibling/IdentityManager/lib/config"
+	"github.com/Kaibling/IdentityManager/repositories/csv"
 	"github.com/Kaibling/IdentityManager/services"
 )
 
 func main() {
 	config.InitConfig()
-	services.InitIdentityService()
+	csvRepo := csv.NewCSVRepo(config.Configuration.DBFilePath)
+	services.InitIdentityService(csvRepo)
 	args := os.Args[1:]
 	args = cmd.ParseFlags(args)
 	if len(args) == 0 {

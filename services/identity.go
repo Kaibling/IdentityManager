@@ -5,37 +5,34 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Kaibling/IdentityManager/lib/config"
 	g "github.com/Kaibling/IdentityManager/lib/generator"
 	"github.com/Kaibling/IdentityManager/models"
-	"github.com/Kaibling/IdentityManager/repositories"
 )
+
+type identityRepo interface {
+	ReadAll() ([]models.PersonFull, error)
+	Create(p models.PersonFull) error
+	Delete(domain string) error
+	Update(p models.PersonFull) error
+}
 
 var IdentityServiceI *IdentityService = nil
 
 type IdentityService struct {
 	identities map[string]models.PersonFull
+	repo       identityRepo
 }
 
-func InitIdentityService() {
-	is := &IdentityService{identities: map[string]models.PersonFull{}}
-	is.ReadFromFile(config.Configuration.DBFilePath)
-	IdentityServiceI = is
-}
-
-func (s *IdentityService) ReadFromFile(filePath string) error {
-	data, err := repositories.ReadFromFile(filePath)
+func InitIdentityService(repo identityRepo) error {
+	is := &IdentityService{identities: map[string]models.PersonFull{}, repo: repo}
+	p, err := is.repo.ReadAll()
 	if err != nil {
 		return err
 	}
-	for i := range data {
-		var person models.PersonFull
-		err = json.Unmarshal([]byte(data[i][1]), &person)
-		if err != nil {
-			return err
-		}
-		s.identities[data[i][0]] = person
+	for i := range p {
+		is.identities[p[i].Domain] = p[i]
 	}
+	IdentityServiceI = is
 	return nil
 }
 
@@ -51,10 +48,10 @@ func (s *IdentityService) NewIdentity(domain string) error {
 		return errors.New("entry already exists")
 	}
 	newIdentity := g.NewRandomPerson()
-	line := []string{domain, newIdentity.ToString()}
-	err := repositories.WriteData(config.Configuration.DBFilePath, line)
+	newIdentity.Domain = domain
+	err := s.repo.Create(*newIdentity)
 	if err != nil {
-		return fmt.Errorf("write Error: %s", err.Error())
+		return err
 	}
 	s.identities[domain] = *newIdentity
 	return nil
@@ -76,7 +73,7 @@ func (s *IdentityService) ShowIdentity(domain string, verbose bool) error {
 
 func (s *IdentityService) Delete(domain string) error {
 	if _, ok := s.identities[domain]; ok {
-		return repositories.RemoveLine(domain, config.Configuration.DBFilePath)
+		return s.repo.Delete(domain)
 	}
 	return errors.New("not found")
 }
@@ -84,7 +81,8 @@ func (s *IdentityService) Delete(domain string) error {
 func (s *IdentityService) Renew(domain string) error {
 	if val, ok := s.identities[domain]; ok {
 		val.Password = g.RandomPassword()
-		err := repositories.ReplaceLine([]string{domain, val.ToString()}, config.Configuration.DBFilePath)
+		err := s.repo.Update(val)
+		//err := csv.ReplaceLine([]string{domain, val.ToString()}, config.Configuration.DBFilePath)
 		if err != nil {
 			return err
 		}
@@ -103,7 +101,7 @@ func (s *IdentityService) Change(domain, property, data string) error {
 		pm[property] = data
 		newPerson := models.PersonFull{}
 		newPerson.FromMap(pm)
-		err = repositories.ReplaceLine([]string{domain, newPerson.ToString()}, config.Configuration.DBFilePath)
+		err = s.repo.Update(newPerson)
 		if err != nil {
 			return err
 		}

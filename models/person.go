@@ -5,6 +5,7 @@ import "encoding/json"
 type PersonFull struct {
 	FirstName         string
 	LastName          string
+	Domain            string
 	Email             string
 	Username          string
 	Password          string
